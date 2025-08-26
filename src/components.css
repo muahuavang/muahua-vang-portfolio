@@ -252,18 +252,47 @@
 }
 
 .profile-photo {
-  width: 300px;
-  height: 300px;
+  width: 350px;
+  height: 350px;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid var(--accent-primary);
   box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-photo:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-hover);
 }
 
 /* About Section */
 .about {
   background: var(--bg-secondary);
   padding: 3rem 0;
+}
+
+.about-content {
+  display: block;
+  margin-top: 2rem;
+}
+
+.about-image {
+  text-align: center;
+}
+
+.graduation-photo {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+  border: 3px solid var(--accent-primary);
+}
+
+.graduation-photo:hover {
+  transform: scale(1.05);
 }
 
 .about-text p {
@@ -333,7 +362,7 @@
   box-shadow: var(--shadow-hover);
 }
 
-.project-image {
+.project-icon {
   width: 80px;
   height: 80px;
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
@@ -341,10 +370,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin: 0 auto 1.5rem;
 }
 
-.project-image i {
+.project-icon i {
   font-size: 2rem;
   color: white;
 }
@@ -356,11 +385,96 @@
   color: var(--text-primary);
 }
 
+.project-categories {
+  margin-bottom: 2rem;
+}
+
+.category-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.category-tag {
+  padding: 0.5rem 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.category-tag:hover,
+.category-tag.active {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+}
+
 .project-description {
   color: var(--text-secondary);
   margin-bottom: 1rem;
   line-height: 1.6;
   flex-grow: 1;
+}
+
+.project-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent-secondary);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--accent-primary);
+  border: 2px solid var(--accent-primary);
+}
+
+.btn-outline:hover {
+  background: var(--accent-primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.projects-cta {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.projects-cta p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
 }
 
 .project-tags {
@@ -803,8 +917,8 @@
   }
   
   .profile-photo {
-    width: 250px;
-    height: 250px;
+    width: 300px;
+    height: 300px;
   }
   
   .projects-grid,
@@ -816,6 +930,15 @@
   .about-stats {
     grid-template-columns: 1fr;
   }
+  
+  .about-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .graduation-photo {
+  max-width: 280px;
+}
   
   .hero-buttons {
     justify-content: center;
@@ -869,8 +992,8 @@
   }
   
   .profile-photo {
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
   }
   
   .education-card,

@@ -26,7 +26,7 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="hero-title">
-              Hi, I'm <span className="highlight">Muahua Ulysses Vang</span>
+              Hi, I&apos;m <span className="highlight">Muahua Ulysses Vang</span>
             </h1>
             <p className="hero-subtitle">AI Engineer & Software Developer</p>
             <p className="hero-description">
@@ -50,8 +50,8 @@ const Hero: React.FC = () => {
           >
             <div className="profile-image">
               <img
-                src="/IMG_2526.jpeg"
-                alt="Muahua Ulysses Vang"
+                src="/images/graduation-photo.jpg"
+                alt="Muahua Ulysses Vang graduation photo"
                 className="profile-photo"
               />
             </div>

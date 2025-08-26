@@ -23,9 +23,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
     }
   };
 
-  const scrollToContact = () => {
-    scrollToSection('contact');
-  };
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -66,7 +64,6 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
           <button className="theme-toggle" onClick={onToggleTheme}>
             <i className={isDarkMode ? "fas fa-sun" : "fas fa-moon"}></i>
           </button>
-          <button className="contact-btn" onClick={scrollToContact}>Contact Me</button>
         </div>
       </div>
 

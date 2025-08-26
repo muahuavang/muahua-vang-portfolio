@@ -1,279 +1,251 @@
-# 🚀 Muahua Ulysses Vang - Portfolio Website
+# Muahua Vang Portfolio
 
-A modern, responsive portfolio website built with **React**, **TypeScript**, and **Framer Motion**. Features include dark/light mode toggle, mobile-responsive hamburger menu, smooth animations, and automated deployment.
+A modern, responsive portfolio website built with React, TypeScript, and Framer Motion. This portfolio showcases professional experience, projects, and skills with a focus on user experience and accessibility.
 
-## ✨ Features
+## 🚀 Features
 
-### 🎨 Design & User Experience
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Dark/Light Mode**: Toggle between themes with automatic system preference detection
-- **Smooth Animations**: Framer Motion powered transitions and micro-interactions
-- **Modern UI**: Clean, professional design with gradient accents and glass-morphism effects
+- **Responsive Design**: Mobile-first approach with seamless desktop experience
+- **Dark/Light Theme**: User preference-based theme switching with local storage persistence
+- **Smooth Animations**: Framer Motion powered animations for enhanced user engagement
+- **Accessibility**: Semantic HTML and ARIA-compliant components
+- **Performance**: Optimized images, lazy loading, and efficient rendering
+- **SEO Ready**: Meta tags and structured data for search engine optimization
 
-### 🔧 Functionality
-- **Theme Persistence**: Remembers user's theme preference using localStorage
-- **Floating Contact Button**: Appears when scrolling and follows the user
-- **Smooth Scrolling**: Navigation links smoothly scroll to sections
-- **Hamburger Menu**: Mobile-responsive navigation with animated transitions
-- **Contact Form**: Functional contact form with validation
-- **Mobile-First**: Responsive design that works perfectly on all devices
+## 🛠️ Tech Stack
 
-### 🛠️ Technical Features
-- **React 18**: Latest React features with hooks and functional components
-- **TypeScript**: Strict type checking for better code quality
-- **CSS Variables**: Dynamic theming with CSS custom properties
-- **Framer Motion**: Performance-optimized animations
-- **Responsive Grid**: CSS Grid and Flexbox for modern layouts
-- **Accessibility**: Semantic HTML and keyboard navigation support
+### Frontend
+- **React 18** - Modern React with hooks and functional components
+- **TypeScript** - Type-safe development with strict type checking
+- **Framer Motion** - Smooth animations and transitions
+- **CSS3** - Custom CSS with CSS variables for theming
+- **Font Awesome** - Icon library for visual elements
+
+### Development Tools
+- **Create React App** - Development environment and build tools
+- **ESLint** - Code quality and consistency
+- **Prettier** - Code formatting
 
 ## 📁 Project Structure
 
 ```
-portfolio-react-ts/
-├── public/                 # Static assets
-│   ├── IMG_2526.jpeg     # Profile image
-│   └── index.html        # HTML template
-├── src/                   # Source code
-│   ├── components/        # React components
-│   │   ├── About.tsx     # About section
-│   │   ├── Competencies.tsx # Skills showcase
-│   │   ├── Contact.tsx   # Contact form
-│   │   ├── Education.tsx # Education history
-│   │   ├── FloatingContact.tsx # Floating contact button
-│   │   ├── Footer.tsx    # Site footer
-│   │   ├── Header.tsx    # Navigation header
-│   │   ├── Hero.tsx      # Hero section
-│   │   ├── Projects.tsx  # Projects showcase
-│   │   └── Skills.tsx    # Technical skills
-│   ├── App.tsx           # Main app component
-│   ├── App.css           # Global styles
-│   ├── components.css    # Component-specific styles
-│   ├── index.css         # Base styles
-│   └── index.tsx         # App entry point
-├── .github/              # GitHub Actions workflows
-├── behind_the_scenes/    # Deployment scripts and docs
-├── package.json          # Dependencies and scripts
-└── tsconfig.json         # TypeScript configuration
+src/
+├── components/          # Reusable UI components
+│   ├── Header.tsx      # Navigation and theme toggle
+│   ├── Hero.tsx        # Landing section
+│   ├── About.tsx       # About section
+│   ├── Projects.tsx    # Project showcase
+│   ├── Education.tsx   # Educational background
+│   ├── Competencies.tsx # Professional competencies
+│   ├── Skills.tsx      # Technical skills
+│   ├── Contact.tsx     # Contact form
+│   ├── Footer.tsx      # Footer information
+│   └── FloatingContact.tsx # Floating contact button
+├── App.tsx             # Main application component
+├── App.css             # Global application styles
+├── components.css      # Component-specific styles
+├── index.tsx           # Application entry point
+└── index.css           # Global styles and CSS variables
 ```
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- **Node.js** (v16 or higher)
-- **npm** or **yarn**
-- **Git**
+- Node.js (v16 or higher)
+- npm or yarn package manager
 
 ### Installation
-1. **Clone the repository**:
+
+1. **Clone the repository**
    ```bash
-   git clone https://github.com/muahuavang/My-Portfolio-Site-Draft.git
-   cd My-Portfolio-Site-Draft
+   git clone <repository-url>
+   cd muahua-vang-portfolio
    ```
 
-2. **Install dependencies**:
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Start development server**:
+3. **Set up environment variables**
+   ```bash
+   cp env.example .env
+   # Edit .env with your configuration values
+   ```
+
+4. **Start development server**
    ```bash
    npm start
    ```
 
-4. **Open in browser**: Navigate to `http://localhost:3000`
+5. **Open your browser**
+   Navigate to `http://localhost:3000`
 
-## 🎯 Available Scripts
+### Available Scripts
 
-- **`npm start`**: Start development server
-- **`npm run build`**: Build for production
-- **`npm test`**: Run tests
-- **`npm run eject`**: Eject from Create React App (not recommended)
+- `npm start` - Start development server
+- `npm run build` - Build for production
+- `npm test` - Run test suite
+- `npm run eject` - Eject from Create React App (not recommended)
 
-## 🚀 Deployment
+## 🎨 Design System
 
-### Automatic Deployment (Recommended)
-The portfolio automatically deploys to GitHub Pages when you push to the main branch.
+### Color Palette
+- **Primary**: #007bff (Blue)
+- **Secondary**: #6c757d (Gray)
+- **Success**: #28a745 (Green)
+- **Warning**: #ffc107 (Yellow)
+- **Danger**: #dc3545 (Red)
+- **Light**: #f8f9fa
+- **Dark**: #343a40
 
-### Manual Deployment
-Use the provided deployment scripts in the `behind_the_scenes/` folder:
+### Typography
+- **Primary Font**: System fonts (San Francisco, Segoe UI, Roboto)
+- **Heading Sizes**: h1 (3rem), h2 (2.5rem), h3 (2rem), h4 (1.5rem)
+- **Body Text**: 1rem (16px) with 1.6 line height
 
-#### Windows (PowerShell)
-```powershell
-.\behind_the_scenes\deploy.ps1
-.\behind_the_scenes\deploy.ps1 -CommitMessage "Add new feature"
-```
-
-#### Windows (Batch)
-```cmd
-behind_the_scenes\deploy.bat
-```
-
-#### Cross-Platform (Bash)
-```bash
-chmod +x behind_the_scenes/deploy.sh
-./behind_the_scenes/deploy.sh
-./behind_the_scenes/deploy.sh -f  # Force deployment
-```
-
-### GitHub Actions
-The repository includes a GitHub Actions workflow that:
-- Automatically builds the project on push/PR
-- Deploys to GitHub Pages
-- Provides build status feedback
-- Comments on pull requests
-
-## 🎨 Customization
-
-### Personal Information
-Edit the following components to personalize your portfolio:
-- **`Hero.tsx`**: Update name, title, and description
-- **`About.tsx`**: Modify personal information and stats
-- **`Projects.tsx`**: Add your projects and work
-- **`Education.tsx`**: Update academic background
-- **`Contact.tsx`**: Change contact details
-
-### Styling
-Modify CSS files to customize:
-- **Colors**: Update CSS variables in `App.css`
-- **Layouts**: Adjust grid layouts and spacing
-- **Animations**: Modify transition durations and effects
-- **Responsive breakpoints**: Customize mobile/tablet layouts
-
-### Theme Colors
-The portfolio uses CSS variables for easy theming:
-```css
-:root {
-  --accent-primary: #4dabf7;    /* Blue */
-  --accent-secondary: #a855f7;   /* Purple */
-  --bg-primary: #ffffff;         /* Light background */
-  --text-primary: #212529;       /* Dark text */
-}
-
-.dark-mode {
-  --bg-primary: #1a1a1a;         /* Dark background */
-  --text-primary: #ffffff;       /* Light text */
-}
-```
+### Spacing
+- **Base Unit**: 0.25rem (4px)
+- **Spacing Scale**: 0.25, 0.5, 1, 1.5, 2, 3, 4, 5, 6
 
 ## 📱 Responsive Breakpoints
 
-- **Desktop**: 1200px and above
-- **Tablet**: 768px - 1199px
-- **Mobile**: Below 768px
-- **Small Mobile**: Below 480px
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
 
-## 🌙 Dark Mode Features
+## 🔧 Configuration
 
-- **Automatic Detection**: Detects system preference on first visit
-- **Manual Toggle**: Sun/moon icon in the header
-- **Persistence**: Remembers user's choice across sessions
-- **Smooth Transitions**: All elements transition smoothly between themes
+### Environment Variables
 
-## 🔧 Development
+Create a `.env` file in the root directory with the following variables:
 
-### Adding New Components
-1. Create component file in `src/components/`
-2. Add component to `App.tsx`
-3. Import and use in your app
-4. Add corresponding styles to `components.css`
-
-### Styling Guidelines
-- Use CSS variables for colors and spacing
-- Follow mobile-first responsive design
-- Maintain consistent naming conventions
-- Use semantic HTML elements
-
-### TypeScript Best Practices
-- Define proper interfaces for props
-- Use strict type checking
-- Avoid `any` types
-- Leverage React.FC for functional components
+```env
+REACT_APP_API_BASE_URL=http://localhost:3001/api
+REACT_APP_ENVIRONMENT=development
+REACT_APP_GOOGLE_ANALYTICS_ID=your_ga_id_here
+REACT_APP_CONTACT_FORM_ENDPOINT=https://your-backend.com/api/contact
+REACT_APP_ENABLE_ANALYTICS=false
+REACT_APP_ENABLE_DEBUG_MODE=true
+```
 
 ## 🧪 Testing
 
-### Local Testing
-- Test on multiple browsers (Chrome, Firefox, Safari, Edge)
-- Test responsive design on different screen sizes
-- Verify all interactive elements work correctly
-- Check accessibility features
-
-### Performance Testing
-- Use browser DevTools for performance analysis
-- Check bundle size with `npm run build`
-- Verify image optimization
-- Test loading speeds on mobile devices
-
-## 🚨 Troubleshooting
-
-### Common Issues
-1. **Build Failures**: Check TypeScript errors and dependencies
-2. **Styling Issues**: Verify CSS variables and responsive breakpoints
-3. **Performance Problems**: Optimize images and check bundle size
-4. **Mobile Issues**: Test responsive design and touch interactions
-
-### Debug Commands
+### Running Tests
 ```bash
-# Check for TypeScript errors
-npm run build
-
-# Test production build locally
-npx serve -s build
-
-# Check bundle size
-npm run build -- --analyze
-
-# Run linting (if configured)
-npm run lint
+npm test
 ```
 
-## 📚 Dependencies
+### Test Coverage
+```bash
+npm run test:coverage
+```
 
-### Core Dependencies
-- **React**: 18.2.0 - UI library
-- **TypeScript**: 4.9.5 - Type safety
-- **Framer Motion**: 10.16.16 - Animations
+## 🚀 Deployment
 
-### Development Dependencies
-- **React Scripts**: 5.0.1 - Build tools
-- **@types/react**: Type definitions
-- **@types/node**: Node.js types
+### Build for Production
+```bash
+npm run build
+```
 
-## 🌐 Hosting Options
+### Deploy to Netlify
+1. Connect your GitHub repository to Netlify
+2. Set build command: `npm run build`
+3. Set publish directory: `build`
+4. Deploy!
 
-### GitHub Pages (Current)
-- **Free hosting** for static sites
-- **Automatic deployment** from main branch
-- **Custom domain** support
-- **HTTPS enabled** by default
+### Deploy to Vercel
+1. Install Vercel CLI: `npm i -g vercel`
+2. Run: `vercel`
+3. Follow the prompts
 
-### Alternative Hosting
-- **Netlify**: Free tier with form handling
-- **Vercel**: Optimized for React apps
-- **Firebase**: Google's hosting solution
+## 📚 API Documentation
+
+### Contact Form Endpoint
+
+**POST** `/api/contact`
+
+Submit a contact form message.
+
+#### Request Body
+```json
+{
+  "email": "user@example.com",
+  "message": "Hello, I'd like to discuss a project opportunity.",
+  "name": "John Doe"
+}
+```
+
+#### Response
+```json
+{
+  "success": true,
+  "message": "Message sent successfully",
+  "data": {
+    "id": "msg_123",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}
+```
+
+#### Error Response
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "errors": {
+    "email": "Invalid email format"
+  }
+}
+```
+
+## 🔒 Security
+
+- All user inputs are validated and sanitized
+- Environment variables are used for sensitive configuration
+- HTTPS is enforced in production
+- CORS is properly configured for API endpoints
+
+## 📈 Performance
+
+- Images are optimized and lazy-loaded
+- Code splitting for better initial load times
+- CSS and JavaScript are minified in production
+- Service worker for offline functionality (planned)
 
 ## 🤝 Contributing
 
-Feel free to:
-- Report bugs or issues
-- Suggest new features
-- Submit improvements
-- Share your customized version
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-## 📞 Support
+### Code Style Guidelines
 
-For questions or support:
-1. Check the [deployment guide](behind_the_scenes/DEPLOYMENT.md)
-2. Review GitHub Issues
-3. Check GitHub Actions for build status
-4. Test locally before reporting issues
+- Use TypeScript for all new code
+- Follow ESLint configuration
+- Write meaningful commit messages
+- Add tests for new functionality
+- Update documentation as needed
 
 ## 📄 License
 
-This portfolio template is free to use and modify for personal and commercial projects.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👤 Author
+
+**Muahua Vang**
+- Email: muahuavang@gmail.com
+- Location: Madison, WI
+- Phone: 608-658-6206
+
+## 🙏 Acknowledgments
+
+- React team for the amazing framework
+- Framer Motion for smooth animations
+- Font Awesome for the icon library
+- The open-source community for inspiration and tools
 
 ---
 
-**Built with ❤️ using React, TypeScript, and Framer Motion**
-
-**Live Site**: [Your Portfolio](https://muahuavang.github.io/My-Portfolio-Site-Draft/)
-**Repository**: [GitHub](https://github.com/muahuavang/My-Portfolio-Site-Draft)
+**Note**: This portfolio is actively maintained and updated. For the latest version, please check the repository or contact the author directly.

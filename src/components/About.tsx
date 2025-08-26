@@ -17,16 +17,16 @@ const About: React.FC = () => {
         <div className="about-content">
           <motion.div 
             className="about-text"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
             <p>
-              I'm a recent graduate from the University of Wisconsin–Madison
+              I&apos;m a recent graduate from the University of Wisconsin–Madison
               with a Bachelor of Science in Information Science and a
               Certificate in Computer Science. Based in Madison, Wisconsin,
-              I'm passionate about developing intuitive AI solutions and
+              I&apos;m passionate about developing intuitive AI solutions and
               writing efficient, scalable code to take on real-world
               challenges.
             </p>

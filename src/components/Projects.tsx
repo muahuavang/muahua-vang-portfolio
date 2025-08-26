@@ -1,87 +1,178 @@
+/**
+ * Projects Component
+ * 
+ * This component showcases portfolio projects with:
+ * - Project cards with detailed information
+ * - Technology tags and project status
+ * - Live demo and source code links
+ * - Responsive grid layout
+ * - Smooth animations and hover effects
+ */
+
 import React from 'react';
 import { motion } from 'framer-motion';
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  icon: string;
-  tags: string[];
-  liveLink?: string;
-  sourceLink?: string;
-}
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+/**
+ * Animation variants for project cards
+ */
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+  hover: { y: -8, scale: 1.02 }
+};
+
+// ============================================================================
+// PROJECTS COMPONENT
+// ============================================================================
 
 const Projects: React.FC = () => {
-  const projects: Project[] = [
-    {
-      id: 1,
-      title: "AI-Powered UX Design",
-      description: "Developed intuitive user interfaces using Human-Computer Interaction principles and AI integration for enhanced user experiences.",
-      icon: "fas fa-robot",
-      tags: ["Python", "UX/HCI", "AI Integration"],
-      liveLink: "#",
-      sourceLink: "#"
-    },
-    {
-      id: 2,
-      title: "Virtual Reality Application",
-      description: "Created immersive VR experiences using Unity and Blender, focusing on intuitive interaction design and user engagement.",
-      icon: "fas fa-vr-cardboard",
-      tags: ["Unity", "Blender", "VR Development"],
-      liveLink: "#",
-      sourceLink: "#"
-    },
-    {
-      id: 3,
-      title: "Data Science & Security",
-      description: "Built secure data processing applications with focus on human factors in information security and data science concepts.",
-      icon: "fas fa-database",
-      tags: ["Python", "R", "Data Security"],
-      liveLink: "#",
-      sourceLink: "#"
-    }
-  ];
-
   return (
-    <section id="projects" className="projects">
+    <section id="projects" className="projects-section">
       <div className="container">
-        <motion.h2 
-          className="section-title"
+        <motion.div
+          className="section-header"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          Featured Projects
-        </motion.h2>
+          <h2 className="section-title">Featured Projects</h2>
+          <p className="section-subtitle">
+            A showcase of my recent work and ongoing projects
+          </p>
+        </motion.div>
+
+        {/* Project Categories */}
+        <motion.div
+          className="project-categories"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <div className="category-tags">
+            <span className="category-tag active">All Projects</span>
+            <span className="category-tag">Web Development</span>
+            <span className="category-tag">AI/ML</span>
+            <span className="category-tag">Data Science</span>
+            <span className="category-tag">UX/UI Design</span>
+          </div>
+        </motion.div>
+
+        {/* Projects Grid */}
         <div className="projects-grid">
-          {projects.map((project, index) => (
-            <motion.div 
-              key={project.id}
-              className="project-card"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-            >
-              <div className="project-image">
-                <i className={project.icon}></i>
-              </div>
-              <h3 className="project-title">{project.title}</h3>
-              <p className="project-description">{project.description}</p>
+          {/* Project Card 1 */}
+          <motion.div
+            className="project-card"
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            whileHover="hover"
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true, margin: '-50px' }}
+          >
+            <div className="project-icon">
+              <i className="fas fa-code"></i>
+            </div>
+            <div className="project-content">
+              <h3 className="project-title">Portfolio Website</h3>
+              <p className="project-description">
+                A modern, responsive portfolio website built with React and TypeScript. 
+                Features smooth animations, dark/light theme switching, and mobile-first design.
+              </p>
               <div className="project-tags">
-                {project.tags.map((tag, tagIndex) => (
-                  <span key={tagIndex} className="tag">{tag}</span>
-                ))}
+                <span className="tag">React</span>
+                <span className="tag">TypeScript</span>
+                <span className="tag">CSS3</span>
+                <span className="tag">Framer Motion</span>
               </div>
-              <div className="project-buttons">
-                <a href={project.liveLink} className="project-btn primary">See Live</a>
-                <a href={project.sourceLink} className="project-btn secondary">Source Code</a>
+              <div className="project-links">
+                <a href="#" className="btn btn-primary">View Live</a>
+                <a href="#" className="btn btn-outline">Source Code</a>
               </div>
-            </motion.div>
-          ))}
+            </div>
+          </motion.div>
+
+          {/* Project Card 2 */}
+          <motion.div
+            className="project-card"
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            whileHover="hover"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true, margin: '-50px' }}
+          >
+            <div className="project-icon">
+              <i className="fas fa-chart-line"></i>
+            </div>
+            <div className="project-content">
+              <h3 className="project-title">Data Analysis Project</h3>
+              <p className="project-description">
+                Comprehensive data analysis using Python and R for statistical modeling 
+                and visualization. Focused on extracting meaningful insights from complex datasets.
+              </p>
+              <div className="project-tags">
+                <span className="tag">Python</span>
+                <span className="tag">R</span>
+                <span className="tag">Pandas</span>
+                <span className="tag">Matplotlib</span>
+              </div>
+              <div className="project-links">
+                <a href="#" className="btn btn-primary">View Live</a>
+                <a href="#" className="btn btn-outline">Source Code</a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Project Card 3 */}
+          <motion.div
+            className="project-card"
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            whileHover="hover"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true, margin: '-50px' }}
+          >
+            <div className="project-icon">
+              <i className="fas fa-palette"></i>
+            </div>
+            <div className="project-content">
+              <h3 className="project-title">UX Research Study</h3>
+              <p className="project-description">
+                User experience research project analyzing user behavior patterns 
+                and interface design effectiveness. Applied HCI principles and usability testing.
+              </p>
+              <div className="project-tags">
+                <span className="tag">UX Research</span>
+                <span className="tag">Usability Testing</span>
+                <span className="tag">Figma</span>
+                <span className="tag">User Interviews</span>
+              </div>
+              <div className="project-links">
+                <a href="#" className="btn btn-primary">View Live</a>
+                <a href="#" className="btn btn-outline">Source Code</a>
+              </div>
+            </div>
+          </motion.div>
         </div>
+
+        {/* Call to Action */}
+        <motion.div
+          className="projects-cta"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+        >
+          <p>Interested in working together? Let&apos;s discuss your project!</p>
+          <a href="#contact" className="btn btn-primary">Get In Touch</a>
+        </motion.div>
       </div>
     </section>
   );

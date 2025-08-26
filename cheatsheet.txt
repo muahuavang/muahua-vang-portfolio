@@ -1,0 +1,4 @@
+npm start to run my portfolio (npm install first if it doesnt work)
+
+git reset --hard (commit detail code from github)
+git push --force (reset for github)
