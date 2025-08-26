@@ -41,26 +41,6 @@ const Projects: React.FC = () => {
           viewport={{ once: true }}
         >
           <h2 className="section-title">Featured Projects</h2>
-          <p className="section-subtitle">
-            A showcase of my recent work and ongoing projects
-          </p>
-        </motion.div>
-
-        {/* Project Categories */}
-        <motion.div
-          className="project-categories"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <div className="category-tags">
-            <span className="category-tag active">All Projects</span>
-            <span className="category-tag">Web Development</span>
-            <span className="category-tag">AI/ML</span>
-            <span className="category-tag">Data Science</span>
-            <span className="category-tag">UX/UI Design</span>
-          </div>
         </motion.div>
 
         {/* Projects Grid */}
@@ -162,17 +142,7 @@ const Projects: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Call to Action */}
-        <motion.div
-          className="projects-cta"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-        >
-          <p>Interested in working together? Let&apos;s discuss your project!</p>
-          <a href="#contact" className="btn btn-primary">Get In Touch</a>
-        </motion.div>
+
       </div>
     </section>
   );

@@ -1,454 +1,118 @@
 /**
  * Contact Component
  * 
- * This component provides a contact form for users to send messages.
- * Features include:
- * - Form validation with real-time feedback
- * - Input sanitization for security
- * - Accessibility features (ARIA labels, error announcements)
- * - Loading states and success/error handling
- * - Responsive design for mobile and desktop
+ * This component provides a functional contact form using EmailJS
+ * with form validation and error handling.
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { motion } from 'framer-motion';
 
-// Utility imports
-import { validateContactForm, sanitizeInput } from '../utils/validation';
-import { submitContactForm } from '../utils/api';
-
-// Type imports
-import { ContactFormData, ContactInfo, ValidationResult, FormFieldConfig } from '../types';
-
-// ============================================================================
-// INTERFACES
-// ============================================================================
-
-/**
- * Props for the Contact component
- */
-interface ContactProps {
-  /** Contact information to display */
-  contactInfo?: ContactInfo;
-  /** Custom form submission handler */
-  onSubmit?: (data: ContactFormData) => Promise<void>;
-}
-
-/**
- * Form field state interface
- */
-interface FieldState {
-  /** Field value */
-  value: string;
-  /** Field error message */
-  error: string;
-  /** Whether field has been touched */
-  touched: boolean;
-}
-
-/**
- * Form state interface
- */
-interface FormState {
-  /** Name field state */
-  name: FieldState;
-  /** Email field state */
-  email: FieldState;
-  /** Subject field state */
-  subject: FieldState;
-  /** Message field state */
-  message: FieldState;
-}
-
-// ============================================================================
-// CONSTANTS
-// ============================================================================
-
-/**
- * Default contact information
- */
-const DEFAULT_CONTACT_INFO: ContactInfo = {
-  email: 'muahuavang@gmail.com',
-  phone: '608-658-6206',
-  location: 'Madison, WI',
-  linkedin: 'https://linkedin.com/in/muahuavang',
-  github: 'https://github.com/muahuavang'
-};
-
-/**
- * Animation variants for form elements
- */
-const formVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 }
-};
-
-/**
- * Form field configuration
- */
-const FORM_FIELDS: Record<keyof FormState, FormFieldConfig> = {
-  name: {
-    label: 'Your Name',
-    placeholder: 'Enter your full name',
-    type: 'text',
-    required: true,
-    minLength: 2,
-    maxLength: 50
-  },
-  email: {
-    label: 'Your Email',
-    placeholder: 'Enter your email address',
-    type: 'email',
-    required: true
-  },
-  subject: {
-    label: 'Subject (Optional)',
-    placeholder: 'Enter message subject',
-    type: 'text',
-    required: false,
-    minLength: 2,
-    maxLength: 100
-  },
-  message: {
-    label: 'Your Message',
-    placeholder: 'Enter your message (minimum 10 characters)',
-    type: 'textarea',
-    required: true,
-    minLength: 10,
-    maxLength: 1000
+// Declare global emailjs object for CDN usage
+declare global {
+  interface Window {
+    emailjs: {
+      send: (
+        serviceId: string,
+        templateId: string,
+        templateParams: Record<string, any>,
+        publicKey: string
+      ) => Promise<any>;
+    };
   }
+}
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+type FormValues = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
 };
 
 // ============================================================================
-// MAIN COMPONENT
+// CONTACT COMPONENT
 // ============================================================================
 
-/**
- * Contact component for user communication
- */
-const Contact: React.FC<ContactProps> = ({ 
-  contactInfo = DEFAULT_CONTACT_INFO,
-  onSubmit 
-}) => {
-  // ========================================================================
-  // STATE MANAGEMENT
-  // ========================================================================
-  
-  /** Form field states */
-  const [formState, setFormState] = useState<FormState>({
-    name: { value: '', error: '', touched: false },
-    email: { value: '', error: '', touched: false },
-    subject: { value: '', error: '', touched: false },
-    message: { value: '', error: '', touched: false }
+const Contact: React.FC = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+  } = useForm<FormValues>();
+
+  // Copy functionality state
+  const [copyStatus, setCopyStatus] = useState<{ email: boolean; phone: boolean }>({
+    email: false,
+    phone: false,
   });
-  
-  /** Form submission state */
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  
-  /** Form submission result */
-  const [submitResult, setSubmitResult] = useState<{
-    success: boolean;
-    message: string;
-  } | null>(null);
-  
-  /** Whether form has been submitted successfully */
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  // ========================================================================
-  // FORM VALIDATION
-  // ========================================================================
-
-  /**
-   * Validates a single form field
-   * @param fieldName - Name of the field to validate
-   * @param value - Field value to validate
-   * @returns Validation result
-   */
-  const validateField = useCallback((fieldName: keyof FormState, value: string): string => {
-    const field = FORM_FIELDS[fieldName];
-    
-    // Check required fields
-    if (field.required && !value.trim()) {
-      return 'This field is required';
-    }
-    
-    // Check minimum length
-    if (field.minLength && value.trim().length < field.minLength) {
-      return `Must be at least ${field.minLength} characters`;
-    }
-    
-    // Check maximum length
-    if (field.maxLength && value.trim().length > field.maxLength) {
-      return `Must be no more than ${field.maxLength} characters`;
-    }
-    
-    // Email-specific validation
-    if (fieldName === 'email' && value.trim()) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value.trim())) {
-        return 'Please enter a valid email address';
-      }
-    }
-    
-    return ''; // No error
-  }, []);
-
-  /**
-   * Validates the entire form
-   * @returns True if form is valid, false otherwise
-   */
-  const validateForm = useCallback((): boolean => {
-    let isValid = true;
-    const newFormState = { ...formState };
-    
-    // Validate each field
-    Object.keys(FORM_FIELDS).forEach((fieldName) => {
-      const key = fieldName as keyof FormState;
-      const error = validateField(key, formState[key].value);
-      
-      if (error) {
-        isValid = false;
-        newFormState[key].error = error;
-        newFormState[key].touched = true;
-      } else {
-        newFormState[key].error = '';
-      }
-    });
-    
-    setFormState(newFormState);
-    return isValid;
-  }, [formState, validateField]);
-
-  // ========================================================================
-  // EVENT HANDLERS
-  // ========================================================================
-
-  /**
-   * Handles input changes for form fields
-   * @param fieldName - Name of the field being changed
-   * @param value - New field value
-   */
-  const handleInputChange = useCallback((
-    fieldName: keyof FormState,
-    value: string
-  ): void => {
-    setFormState(prev => ({
-      ...prev,
-      [fieldName]: {
-        ...prev[fieldName],
-        value: sanitizeInput(value),
-        error: '', // Clear error when user starts typing
-        touched: true
-      }
-    }));
-  }, []);
-
-  /**
-   * Handles field blur events for validation
-   * @param fieldName - Name of the field that lost focus
-   */
-  const handleFieldBlur = useCallback((fieldName: keyof FormState): void => {
-    const field = formState[fieldName];
-    const error = validateField(fieldName, field.value);
-    
-    setFormState(prev => ({
-      ...prev,
-      [fieldName]: {
-        ...prev[fieldName],
-        error,
-        touched: true
-      }
-    }));
-  }, [formState, validateField]);
-
-  /**
-   * Handles form submission
-   * @param event - Form submission event
-   */
-  const handleSubmit = useCallback(async (event: React.FormEvent): Promise<void> => {
-    event.preventDefault();
-    
-    // Validate form before submission
-    if (!validateForm()) {
-      return;
-    }
-    
-    setIsSubmitting(true);
-    setSubmitResult(null);
-    
+  // Copy to clipboard function
+  const copyToClipboard = async (text: string, type: 'email' | 'phone') => {
     try {
-      // Prepare form data
-      const formData: ContactFormData = {
-        name: formState.name.value.trim(),
-        email: formState.email.value.trim(),
-        message: formState.message.value.trim(),
-        subject: formState.subject.value.trim() || undefined
-      };
+      await navigator.clipboard.writeText(text);
+      setCopyStatus(prev => ({ ...prev, [type]: true }));
       
-      // Submit form
-      if (onSubmit) {
-        await onSubmit(formData);
-      } else {
-        await submitContactForm(formData);
-      }
-      
-      // Handle success
-      setSubmitResult({
-        success: true,
-        message: 'Thank you for your message! I will get back to you soon.'
-      });
-      setIsSubmitted(true);
-      
-      // Reset form
-      setFormState({
-        name: { value: '', error: '', touched: false },
-        email: { value: '', error: '', touched: false },
-        subject: { value: '', error: '', touched: false },
-        message: { value: '', error: '', touched: false }
-      });
-      
-    } catch (error) {
-      // Handle error
-      console.error('Form submission error:', error);
-      setSubmitResult({
-        success: false,
-        message: error instanceof Error ? error.message : 'Failed to send message. Please try again.'
-      });
-    } finally {
-      setIsSubmitting(false);
+      // Reset copy status after 2 seconds
+      setTimeout(() => {
+        setCopyStatus(prev => ({ ...prev, [type]: false }));
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
     }
-  }, [formState, validateForm, onSubmit]);
-
-  /**
-   * Resets the form to initial state
-   */
-  const handleReset = useCallback((): void => {
-    setFormState({
-      name: { value: '', error: '', touched: false },
-      email: { value: '', error: '', touched: false },
-      subject: { value: '', error: '', touched: false },
-      message: { value: '', error: '', touched: false }
-    });
-    setSubmitResult(null);
-    setIsSubmitted(false);
-  }, []);
-
-  // ========================================================================
-  // EFFECTS
-  // ========================================================================
-
-  /**
-   * Auto-hide success message after 5 seconds
-   */
-  useEffect(() => {
-    if (submitResult?.success) {
-      const timer = setTimeout(() => {
-        setSubmitResult(null);
-      }, 5000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [submitResult?.success]);
-
-  // ========================================================================
-  // RENDER HELPERS
-  // ========================================================================
-
-  /**
-   * Renders a form field with proper validation and accessibility
-   * @param fieldName - Name of the field to render
-   * @returns JSX element for the field
-   */
-  const renderField = (fieldName: keyof FormState): JSX.Element => {
-    const field = FORM_FIELDS[fieldName];
-    const state = formState[fieldName];
-    const fieldId = `contact-${fieldName}`;
-    
-    return (
-      <div className="form-group" key={fieldName}>
-        <label htmlFor={fieldId} className="form-label">
-          {field.label}
-          {field.required && <span className="required">*</span>}
-        </label>
-        
-        {field.type === 'textarea' ? (
-          <textarea
-            id={fieldId}
-            name={fieldName}
-            placeholder={field.placeholder}
-            value={state.value}
-            onChange={(e) => handleInputChange(fieldName, e.target.value)}
-            onBlur={() => handleFieldBlur(fieldName)}
-            rows={4}
-            required={field.required}
-            minLength={field.minLength}
-            maxLength={field.maxLength}
-            className={`form-input ${state.error && state.touched ? 'error' : ''}`}
-            aria-describedby={state.error && state.touched ? `${fieldId}-error` : undefined}
-            aria-invalid={state.error && state.touched ? 'true' : 'false'}
-          />
-        ) : (
-          <input
-            id={fieldId}
-            name={fieldName}
-            type={field.type}
-            placeholder={field.placeholder}
-            value={state.value}
-            onChange={(e) => handleInputChange(fieldName, e.target.value)}
-            onBlur={() => handleFieldBlur(fieldName)}
-            required={field.required}
-            minLength={field.minLength}
-            maxLength={field.maxLength}
-            className={`form-input ${state.error && state.touched ? 'error' : ''}`}
-            aria-describedby={state.error && state.touched ? `${fieldId}-error` : undefined}
-            aria-invalid={state.error && state.touched ? 'true' : 'false'}
-          />
-        )}
-        
-        {/* Error message */}
-        {state.error && state.touched && (
-          <div 
-            id={`${fieldId}-error`}
-            className="form-error" 
-            role="alert"
-            aria-live="polite"
-          >
-            {state.error}
-          </div>
-        )}
-        
-        {/* Character count for textarea */}
-        {field.type === 'textarea' && field.maxLength && (
-          <div className="char-count">
-            {state.value.length} / {field.maxLength}
-          </div>
-        )}
-      </div>
-    );
   };
 
-  // ========================================================================
-  // RENDER
-  // ========================================================================
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    try {
+      // EmailJS credentials
+      const serviceId = 'service_zzugue6';
+      const templateId = 'template_g1nu38e';
+      const publicKey = 'qEc6NdWGsxAcGtd7U';
+      
+      // Log what we're sending for debugging
+      console.log('Sending EmailJS with data:', {
+        name: data.name,
+        subject: data.subject,
+        message: data.message,
+      });
+      
+      await window.emailjs.send(
+        serviceId,
+        templateId,
+        {
+          name: data.name,
+          subject: data.subject,
+          message: data.message,
+        },
+        publicKey
+      );
+      reset();
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+    }
+  };
 
   return (
-    <section id="contact" className="contact" aria-labelledby="contact-title">
+    <section id="contact" className="contact-section">
       <div className="container">
-        <motion.h2 
-          id="contact-title"
-          className="section-title"
+        <motion.div
+          className="section-header"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          Contact Me
-        </motion.h2>
-        
+          <h2 className="section-title">Contact Me</h2>
+        </motion.div>
+
         <div className="contact-content">
           {/* Contact Information */}
-          <motion.div 
+          <motion.div
             className="contact-info"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -459,125 +123,147 @@ const Contact: React.FC<ContactProps> = ({
             <div className="contact-details">
               <div className="contact-item">
                 <i className="fas fa-envelope" aria-hidden="true"></i>
-                <a 
-                  href={`mailto:${contactInfo.email}`}
-                  className="contact-link"
-                  aria-label={`Send email to ${contactInfo.email}`}
+                <button
+                  onClick={() => copyToClipboard('muahuavang@gmail.com', 'email')}
+                  className={`contact-link copyable ${copyStatus.email ? 'copied' : ''}`}
+                  aria-label="Copy email address"
+                  title="Click to copy email address"
                 >
-                  {contactInfo.email}
-                </a>
+                  muahuavang@gmail.com
+                  {copyStatus.email && (
+                    <span className="copy-feedback">
+                      <i className="fas fa-check" aria-hidden="true"></i>
+                      Copied!
+                    </span>
+                  )}
+                </button>
               </div>
               
               <div className="contact-item">
                 <i className="fas fa-phone" aria-hidden="true"></i>
-                <a 
-                  href={`tel:${contactInfo.phone}`}
-                  className="contact-link"
-                  aria-label={`Call ${contactInfo.phone}`}
+                <button
+                  onClick={() => copyToClipboard('608-658-6206', 'phone')}
+                  className={`contact-link copyable ${copyStatus.phone ? 'copied' : ''}`}
+                  aria-label="Copy phone number"
+                  title="Click to copy phone number"
                 >
-                  {contactInfo.phone}
-                </a>
+                  608-658-6206
+                  {copyStatus.phone && (
+                    <span className="copy-feedback">
+                      <i className="fas fa-check" aria-hidden="true"></i>
+                      Copied!
+                    </span>
+                  )}
+                </button>
               </div>
-              
-              <div className="contact-item">
-                <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
-                <span>{contactInfo.location}</span>
-              </div>
-              
-              {contactInfo.linkedin && (
-                <div className="contact-item">
-                  <i className="fab fa-linkedin" aria-hidden="true"></i>
-                  <a 
-                    href={contactInfo.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="contact-link"
-                    aria-label="Visit LinkedIn profile"
-                  >
-                    LinkedIn Profile
-                  </a>
-                </div>
-              )}
-              
-              {contactInfo.github && (
-                <div className="contact-item">
-                  <i className="fab fa-github" aria-hidden="true"></i>
-                  <a 
-                    href={contactInfo.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="contact-link"
-                    aria-label="Visit GitHub profile"
-                  >
-                    GitHub Profile
-                  </a>
-                </div>
-              )}
             </div>
           </motion.div>
-          
+
           {/* Contact Form */}
-          <motion.form 
+          <motion.form
+            onSubmit={handleSubmit(onSubmit)}
             className="contact-form"
-            onSubmit={handleSubmit}
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            noValidate
           >
-            {/* Success/Error Messages */}
-            <AnimatePresence>
-              {submitResult && (
-                <motion.div
-                  className={`form-message ${submitResult.success ? 'success' : 'error'}`}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  role="alert"
-                  aria-live="polite"
-                >
-                  {submitResult.message}
-                </motion.div>
-              )}
-            </AnimatePresence>
-            
-            {/* Form Fields */}
-            {(Object.keys(FORM_FIELDS) as Array<keyof FormState>).map(renderField)}
-            
-            {/* Form Actions */}
-            <div className="form-actions">
-              <button 
-                type="submit" 
-                className="btn btn-primary"
-                disabled={isSubmitting}
-                aria-describedby={isSubmitting ? 'submitting-status' : undefined}
-              >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
-              
-              {isSubmitted && (
-                <button 
-                  type="button" 
-                  className="btn btn-secondary"
-                  onClick={handleReset}
-                >
-                  Send Another Message
-                </button>
-              )}
-            </div>
-            
-            {/* Loading Status */}
-            {isSubmitting && (
-              <div 
-                id="submitting-status"
-                className="submitting-status"
-                aria-live="polite"
-              >
-                Submitting your message...
-              </div>
+          {/* Name Field */}
+          <div className="form-group">
+            <label htmlFor="name" className="form-label">
+              Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              {...register('name', { required: 'Name is required' })}
+              className={`form-input ${errors.name ? 'error' : ''}`}
+              placeholder="Enter your full name"
+            />
+            {errors.name && (
+              <span className="error-message">{errors.name.message}</span>
             )}
-          </motion.form>
+          </div>
+
+          {/* Email Field */}
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              {...register('email', {
+                required: 'Email is required',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: 'Invalid email format',
+                },
+              })}
+              className={`form-input ${errors.email ? 'error' : ''}`}
+              placeholder="Enter your email address"
+            />
+            {errors.email && (
+              <span className="error-message">{errors.email.message}</span>
+            )}
+          </div>
+
+          {/* Subject Field */}
+          <div className="form-group">
+            <label htmlFor="subject" className="form-label">
+              Subject
+            </label>
+            <input
+              id="subject"
+              type="text"
+              {...register('subject', { required: 'Subject is required' })}
+              className={`form-input ${errors.subject ? 'error' : ''}`}
+              placeholder="Enter message subject"
+            />
+            {errors.subject && (
+              <span className="error-message">{errors.subject.message}</span>
+            )}
+          </div>
+
+          {/* Message Field */}
+          <div className="form-group">
+            <label htmlFor="message" className="form-label">
+              Message
+            </label>
+            <textarea
+              id="message"
+              rows={5}
+              {...register('message', { required: 'Message is required' })}
+              className={`form-input ${errors.message ? 'error' : ''}`}
+              placeholder="Tell me about your project or question"
+            />
+            {errors.message && (
+              <span className="error-message">{errors.message.message}</span>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="submit-btn"
+          >
+            {isSubmitting ? 'Sending...' : 'Send Message'}
+          </button>
+
+          {/* Success Message */}
+          {isSubmitSuccessful && (
+            <motion.div
+              className="success-message"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <i className="fas fa-check-circle"></i>
+              <span>Message sent successfully! I&apos;ll get back to you soon.</span>
+            </motion.div>
+          )}
+        </motion.form>
         </div>
       </div>
     </section>
