@@ -2,3 +2,7 @@ npm start to run my portfolio (npm install first if it doesnt work)
 
 git reset --hard (commit detail code from github)
 git push --force (reset for github)
+
+git add .
+git commit -m "description of what i'm adding"
+git push origin main

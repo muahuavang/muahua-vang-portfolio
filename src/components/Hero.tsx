@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Particles from './Particles';
 
 const Hero: React.FC = () => {
   const scrollToSection = (sectionId: string) => {
@@ -17,6 +18,21 @@ const Hero: React.FC = () => {
 
   return (
     <section className="hero">
+      {/* Galaxy Background Effect */}
+      <div className="hero-particles-background">
+        <Particles
+          particleColors={['#4f46e5', '#7c3aed', '#06b6d4', '#ffffff', '#a855f7', '#3b82f6']}
+          particleCount={1600}
+          particleSpread={30}
+          speed={0.06}
+          particleBaseSize={200}
+          sizeRandomness={1.5}
+          moveParticlesOnHover={true}
+          alphaParticles={true}
+          disableRotation={false}
+        />
+      </div>
+      
       <div className="container">
         <div className="hero-content">
           <motion.div 
