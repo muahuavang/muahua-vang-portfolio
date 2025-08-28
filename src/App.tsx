@@ -227,16 +227,16 @@ const App: React.FC = () => {
       
 
       
-      {/* Main content area */}
-      <main role="main">
-        <Hero />
-        <About />
-        <Projects />
-        <Education />
-        <Competencies />
-        <Skills />
-        <Contact />
-      </main>
+             {/* Main content area */}
+       <main role="main">
+         <Hero />
+         <About />
+         <Projects />
+         <Education />
+         <Competencies />
+         <Skills />
+         <Contact />
+       </main>
       
       {/* Footer */}
       <Footer />
