@@ -1,0 +1,24 @@
+{
+  "short_name": "Muahua Portfolio",
+  "name": "Muahua Vang Portfolio - UX/HCI & AI Specialist",
+  "description": "Professional portfolio showcasing expertise in Human-Computer Interaction, AI integration, and data science",
+  "icons": [
+    {
+      "src": "me big.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "pixil-frame-0.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity", "education"],
+  "lang": "en-US"
+}
