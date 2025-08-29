@@ -67,12 +67,12 @@ const Projects: React.FC = () => {
               <div className="project-tags">
                 <span className="tag">React</span>
                 <span className="tag">TypeScript</span>
-                <span className="tag">CSS3</span>
+                <span className="tag">CSS</span>
                 <span className="tag">Framer Motion</span>
               </div>
               <div className="project-links">
-                <a href="#" className="btn btn-primary">View Live</a>
-                <a href="#" className="btn btn-outline">Source Code</a>
+                <a href="https://muahua-vang-portfolio.vercel.app/#" target="_blank" rel="noopener noreferrer" className="btn btn-primary">View Live</a>
+                <a href="https://github.com/muahuavang/muahua-vang-portfolio" target="_blank" rel="noopener noreferrer" className="btn btn-outline">Source Code</a>
               </div>
             </div>
           </motion.div>
@@ -91,7 +91,7 @@ const Projects: React.FC = () => {
               <i className="fas fa-chart-line"></i>
             </div>
             <div className="project-content">
-              <h3 className="project-title">Data Analysis Project</h3>
+              <h3 className="project-title">PLACEHOLDER: Data Analysis Project</h3>
               <p className="project-description">
                 Comprehensive data analysis using Python and R for statistical modeling 
                 and visualization. Focused on extracting meaningful insights from complex datasets.
@@ -123,7 +123,7 @@ const Projects: React.FC = () => {
               <i className="fas fa-palette"></i>
             </div>
             <div className="project-content">
-              <h3 className="project-title">UX Research Study</h3>
+              <h3 className="project-title">PLACEHOLDER: UX Research Study</h3>
               <p className="project-description">
                 User experience research project analyzing user behavior patterns 
                 and interface design effectiveness. Applied HCI principles and usability testing.
